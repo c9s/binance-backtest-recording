@@ -4,14 +4,21 @@ const MongoClient = require('mongodb').MongoClient;
 const https = require('https')
 
 const mongoUrl = "mongodb://localhost:27017/";
-const symbol = "BTCUSDT"
+
+
+let symbol = "BTCUSDT";
+
+var args = process.argv.slice(2);
+if (args.length > 0) {
+	let symbol = args[0]
+}
+
 const depthLimit = 1000
-const depthURL= `https://api.binance.com/api/v3/depth?symbol=${symbol}&limit=${depthLimit}`
 
 let commandId = 1
 
 function getJSON(url, cb) {
-    https.get(depthURL, (resp) => {
+    https.get(url, (resp) => {
         let data = '';
 
         // A chunk of data has been recieved.
@@ -53,6 +60,7 @@ MongoClient.connect(mongoUrl, (err, db) => {
     var lastDiff = null;
 
     const getDepthAndInsert = () => {
+	const depthURL= `https://api.binance.com/api/v3/depth?symbol=${symbol}&limit=${depthLimit}`
         getJSON(depthURL, (depth) => {
             lastDepth = depth
 
