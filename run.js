@@ -46,6 +46,8 @@ MongoClient.connect(mongoUrl, (err, db) => {
 
     var dbo = db.db("binance");
     var depths = dbo.collection("depths")
+    var klines = dbo.collection("klines")
+
     var lastDepth = null;
     var timer = null;
     var lastDiff = null;
@@ -111,13 +113,13 @@ MongoClient.connect(mongoUrl, (err, db) => {
                 "type": "kline",
                 "insertionTime": (new Date).getTime(),
                 "eventTime": e.E,
-                "kline": e,
+                "kline": e.k,
             }
 
-            depths.insertOne(doc, function(err, res) {
+            klines.insertOne(doc, function(err, res) {
                 if (err) throw err;
 
-                console.log(`inserted kline, record: ${res.insertedId}: event: ${e.E}, O: ${e.o} H: ${e.o} L: ${e.o} C: ${e.o}`)
+                console.log(`inserted kline, record: ${res.insertedId}: event: ${e.E}, O: ${e.k.o} H: ${e.k.o} L: ${e.k.o} C: ${e.k.o}`)
             });
 
         } else if (e.e == "depthUpdate") {
