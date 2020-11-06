@@ -119,7 +119,7 @@ MongoClient.connect(mongoUrl, (err, db) => {
             klines.insertOne(doc, function(err, res) {
                 if (err) throw err;
 
-                console.log(`inserted kline, record: ${res.insertedId}: event: ${e.E}, O: ${e.k.o} H: ${e.k.o} L: ${e.k.o} C: ${e.k.o}`)
+                console.log(`inserted kline, record: ${res.insertedId}: event: ${e.E}, interval:${e.k.i} O: ${e.k.o} H: ${e.k.o} L: ${e.k.o} C: ${e.k.o}`)
             });
 
         } else if (e.e == "depthUpdate") {
